@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y\
   make \
   gcc \
   g++ \
-  oracle-java8-jdk
+  oracle-java8-jdk \
+&& rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt
 
