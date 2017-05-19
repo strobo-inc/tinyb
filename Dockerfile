@@ -5,7 +5,8 @@ RUN [ "cross-build-start" ]
 RUN apt-get update && apt-get install -y\
   git \
   cmake \
-  libglib2.0-dev \
+  libglib2.0-0=2.42.1-1+b1 \
+  libglib2.0-dev=2.42.1-1+b1 \
   make \
   gcc \
   g++ \
