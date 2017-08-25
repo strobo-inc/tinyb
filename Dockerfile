@@ -46,3 +46,4 @@ RUN cd build \
 
 
 RUN [ "cross-build-end" ]
+ENTRYPOINT ["/bin/bash"]
