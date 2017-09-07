@@ -78,6 +78,8 @@ public:
     ~BluetoothAdapter();
     virtual BluetoothAdapter *clone() const;
 
+    std::string get_interface_name();
+
     std::unique_ptr<BluetoothDevice> find(std::string *name,
         std::string *identifier,
         std::chrono::milliseconds timeout = std::chrono::milliseconds::zero())
