@@ -29,6 +29,7 @@
 #include "BluetoothDevice.hpp"
 #include "BluetoothManager.hpp"
 #include "BluetoothException.hpp"
+#include "BluetoothUUID.hpp"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -210,18 +211,19 @@ bool BluetoothAdapter::stop_discovery ()
     return result;
 }
 
-bool BluetoothAdapter::set_discovery_filter(std::vector <std::string> uuids, int16_t rssi, uint16_t pathloss ,
+bool BluetoothAdapter::set_discovery_filter(std::vector <BluetoothUUID> uuids, int16_t rssi, uint16_t pathloss ,
                                             const TransportType &transport) {
     GError *error = NULL;
     bool result = true;
     GVariantDict dict;
     g_variant_dict_init(&dict, NULL);
     if (uuids.size() > 0) {
-        GVariantBuilder *builder = g_variant_builder_new(G_VARIANT_TYPE("a(s)"));
+        GVariantBuilder *builder = g_variant_builder_new(G_VARIANT_TYPE_ARRAY);
         for (auto i = uuids.begin(); i != uuids.end(); ++i) {
-            g_variant_builder_add(builder, "(s)", i->c_str());
+            g_variant_builder_add(builder, "s", i->get_string().c_str());
+            printf("Add filter UUID=%s\n",i->get_string().c_str());
         }
-        GVariant *uuids_variant = g_variant_new("a(s)", builder);
+        GVariant *uuids_variant = g_variant_builder_end(builder);
         g_variant_builder_unref(builder);
         g_variant_dict_insert_value(&dict, "UUIDs", uuids_variant);
     }

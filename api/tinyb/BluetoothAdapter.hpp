@@ -125,7 +125,7 @@ public:
      * @param[in] transport tansport type
      * @return TRUE if filter was successfully configured.
      */
-    bool set_discovery_filter(std::vector<std::string>uuids,int16_t rssi=0,uint16_t pathloss=0,const TransportType &transport=TransportType::NONE);
+    bool set_discovery_filter(std::vector<BluetoothUUID>uuids,int16_t rssi=0,uint16_t pathloss=0,const TransportType &transport=TransportType::NONE);
 
     /** Remove discovery filter
      *

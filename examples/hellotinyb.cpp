@@ -72,8 +72,9 @@ int main(int argc, char **argv)
     }
     /* Get Adapter Info  and set discovery filter*/
     auto adapters=manager->get_adapters();
-    std::vector<std::string> uuids;
-    uuids.push_back("3C111001-C75C-50C4-1F1A-6789E2AFDE4E");
+    std::vector<BluetoothUUID> uuids;
+    BluetoothUUID uuid("3C111001-C75C-50C4-1F1A-6789E2AFDE4E");
+    uuids.push_back(uuid);
     for(auto it=adapters.begin();it!=adapters.end();it++){
         std::cout<<"Interface = "<<(*it)->get_interface_name()<<" ";
         std::cout<<"Address = "<<(*it)->get_address()<<" ";
