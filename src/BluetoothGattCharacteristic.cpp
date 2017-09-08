@@ -124,7 +124,6 @@ std::unique_ptr<BluetoothGattCharacteristic> BluetoothGattCharacteristic::make(
 std::vector<unsigned char> BluetoothGattCharacteristic::read_value (uint16_t offset)
 {
     GError *error = NULL;
-    GBytes *result_gbytes;
 
     GVariantDict dict;
     g_variant_dict_init(&dict, NULL);
@@ -133,21 +132,22 @@ std::vector<unsigned char> BluetoothGattCharacteristic::read_value (uint16_t off
         g_variant_dict_insert_value(&dict, "offset", g_variant_new_uint16(offset));
 
     GVariant *variant = g_variant_dict_end(&dict);
-
+    GVariant *read_value_variant;
     gatt_characteristic1_call_read_value_sync(
         object,
-        &result_gbytes,
         variant,
+        &read_value_variant,
         NULL,
         &error
     );
 
     handle_error(error);
 
+    GBytes*result_gbytes=g_variant_get_data_as_bytes(read_value_variant);
     std::vector<unsigned char> result = from_gbytes_to_vector(result_gbytes);
 
     /* free the gbytes array */
-    g_bytes_unref(result_gbytes);
+    g_variant_unref(read_value_variant);
 
     return result;
 }
@@ -157,8 +157,10 @@ bool BluetoothGattCharacteristic::write_value (
 {
     GError *error = NULL;
     bool result = true;
+    gboolean trusted=true;
 
     GBytes *arg_value_gbytes = from_vector_to_gbytes(arg_value);
+    GVariant* arg_value_variant=g_variant_new_from_bytes(G_VARIANT_TYPE_BYTESTRING,arg_value_gbytes,trusted);
 
     GVariantDict dict;
     g_variant_dict_init(&dict, NULL);
@@ -170,7 +172,7 @@ bool BluetoothGattCharacteristic::write_value (
 
     result = gatt_characteristic1_call_write_value_sync(
         object,
-        arg_value_gbytes,
+        arg_value_variant,
         variant,
         NULL,
         &error
@@ -268,17 +270,18 @@ BluetoothGattService BluetoothGattCharacteristic::get_service ()
 
 std::vector<unsigned char> BluetoothGattCharacteristic::get_value ()
 {
-    GBytes *value_gbytes = const_cast<GBytes *>(gatt_characteristic1_get_value (object));
+    GVariant*value_variant=gatt_characteristic1_get_value (object);
+    GBytes *value_gbytes = g_variant_get_data_as_bytes(value_variant);
     std::vector<unsigned char> result;
 
     try {
         result = from_gbytes_to_vector(value_gbytes);
     } catch (std::exception &e) {
-        g_bytes_unref(value_gbytes);
+        g_variant_unref(value_variant);
         throw e;
     }
 
-    g_bytes_unref(value_gbytes);
+    g_variant_unref(value_variant);
 
     return result;
 }

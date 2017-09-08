@@ -33,6 +33,13 @@ typedef struct _Object Object;
 struct _Adapter1;
 typedef struct _Adapter1 Adapter1;
 
+enum class TransportType{
+    AUTO,
+    BREDR,
+    LE,
+    NONE
+};
+
 /**
   * Provides access to Bluetooth adapters. Follows the BlueZ adapter API
   * available at: http://git.kernel.org/cgit/bluetooth/bluez.git/tree/doc/adapter-api.txt
@@ -111,6 +118,20 @@ public:
     bool stop_discovery (
     );
 
+    /** Set discovery filter.
+     * @param[in] uuids array of target uuids
+     * @param[in] rssi signal strength
+     * @param[in] pathloss pathloss
+     * @param[in] transport tansport type
+     * @return TRUE if filter was successfully configured.
+     */
+    bool set_discovery_filter(std::vector<std::string>uuids,int16_t rssi=0,uint16_t pathloss=0,const TransportType &transport=TransportType::NONE);
+
+    /** Remove discovery filter
+     *
+     * @return TRUE if filter was successfully removed.
+     */
+    bool remove_discovery_filter(void);
 
     /** Returns a list of BluetoothDevices visible from this adapter.
       * @return A list of BluetoothDevices visible on this adapter,

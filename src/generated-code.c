@@ -7890,7 +7890,7 @@ static const _ExtendedGDBusArgInfo _gatt_characteristic1_method_info_read_value_
     (gchar *) "ay",
     NULL
   },
-  FALSE
+  TRUE
 };
 
 static const _ExtendedGDBusArgInfo * const _gatt_characteristic1_method_info_read_value_OUT_ARG_pointers[] =
@@ -7920,7 +7920,7 @@ static const _ExtendedGDBusArgInfo _gatt_characteristic1_method_info_write_value
     (gchar *) "ay",
     NULL
   },
-  FALSE
+  TRUE
 };
 
 static const _ExtendedGDBusArgInfo _gatt_characteristic1_method_info_write_value_IN_ARG_options =
@@ -8025,7 +8025,7 @@ static const _ExtendedGDBusPropertyInfo _gatt_characteristic1_property_info_valu
     NULL
   },
   "value",
-  FALSE
+  TRUE
 };
 
 static const _ExtendedGDBusPropertyInfo _gatt_characteristic1_property_info_notifying =
@@ -8204,7 +8204,7 @@ gatt_characteristic1_default_init (GattCharacteristic1Iface *iface)
     g_cclosure_marshal_generic,
     G_TYPE_BOOLEAN,
     3,
-    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_STRING, G_TYPE_VARIANT);
+    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_VARIANT, G_TYPE_VARIANT);
 
   /**
    * GattCharacteristic1::handle-start-notify:
@@ -8277,7 +8277,7 @@ gatt_characteristic1_default_init (GattCharacteristic1Iface *iface)
    * Since the D-Bus property for this #GObject property is readable but not writable, it is meaningful to read from it on both the client- and service-side. It is only meaningful, however, to write to it on the service-side.
    */
   g_object_interface_install_property (iface,
-    g_param_spec_string ("value", "Value", "Value", NULL, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+    g_param_spec_variant ("value", "Value", "Value", G_VARIANT_TYPE ("ay"), NULL, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   /**
    * GattCharacteristic1:notifying:
    *
@@ -8421,7 +8421,7 @@ gatt_characteristic1_set_service (GattCharacteristic1 *object, const gchar *valu
  *
  * Returns: (transfer none): The property value or %NULL if the property is not set. Do not free the returned value, it belongs to @object.
  */
-const gchar *
+GVariant *
 gatt_characteristic1_get_value (GattCharacteristic1 *object)
 {
   return GATT_CHARACTERISTIC1_GET_IFACE (object)->get_value (object);
@@ -8435,12 +8435,12 @@ gatt_characteristic1_get_value (GattCharacteristic1 *object)
  *
  * Since this D-Bus property is readable, it is meaningful to use this function on both the client- and service-side.
  *
- * Returns: (transfer full): The property value or %NULL if the property is not set. The returned value should be freed with g_free().
+ * Returns: (transfer full): The property value or %NULL if the property is not set. The returned value should be freed with g_variant_unref().
  */
-gchar *
+GVariant *
 gatt_characteristic1_dup_value (GattCharacteristic1 *object)
 {
-  gchar *value;
+  GVariant *value;
   g_object_get (G_OBJECT (object), "value", &value, NULL);
   return value;
 }
@@ -8455,7 +8455,7 @@ gatt_characteristic1_dup_value (GattCharacteristic1 *object)
  * Since this D-Bus property is not writable, it is only meaningful to use this function on the service-side.
  */
 void
-gatt_characteristic1_set_value (GattCharacteristic1 *object, const gchar *value)
+gatt_characteristic1_set_value (GattCharacteristic1 *object, GVariant *value)
 {
   g_object_set (G_OBJECT (object), "value", value, NULL);
 }
@@ -8640,7 +8640,7 @@ gatt_characteristic1_call_read_value (
 gboolean
 gatt_characteristic1_call_read_value_finish (
     GattCharacteristic1 *proxy,
-    gchar **out_value,
+    GVariant **out_value,
     GAsyncResult *res,
     GError **error)
 {
@@ -8649,7 +8649,7 @@ gatt_characteristic1_call_read_value_finish (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(^ay)",
+                 "(@ay)",
                  out_value);
   g_variant_unref (_ret);
 _out:
@@ -8674,7 +8674,7 @@ gboolean
 gatt_characteristic1_call_read_value_sync (
     GattCharacteristic1 *proxy,
     GVariant *arg_options,
-    gchar **out_value,
+    GVariant **out_value,
     GCancellable *cancellable,
     GError **error)
 {
@@ -8690,7 +8690,7 @@ gatt_characteristic1_call_read_value_sync (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(^ay)",
+                 "(@ay)",
                  out_value);
   g_variant_unref (_ret);
 _out:
@@ -8715,7 +8715,7 @@ _out:
 void
 gatt_characteristic1_call_write_value (
     GattCharacteristic1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
@@ -8723,7 +8723,7 @@ gatt_characteristic1_call_write_value (
 {
   g_dbus_proxy_call (G_DBUS_PROXY (proxy),
     "WriteValue",
-    g_variant_new ("(^ay@a{sv})",
+    g_variant_new ("(@ay@a{sv})",
                    arg_value,
                    arg_options),
     G_DBUS_CALL_FLAGS_NONE,
@@ -8777,7 +8777,7 @@ _out:
 gboolean
 gatt_characteristic1_call_write_value_sync (
     GattCharacteristic1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GError **error)
@@ -8785,7 +8785,7 @@ gatt_characteristic1_call_write_value_sync (
   GVariant *_ret;
   _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
     "WriteValue",
-    g_variant_new ("(^ay@a{sv})",
+    g_variant_new ("(@ay@a{sv})",
                    arg_value,
                    arg_options),
     G_DBUS_CALL_FLAGS_NONE,
@@ -8999,10 +8999,10 @@ void
 gatt_characteristic1_complete_read_value (
     GattCharacteristic1 *object,
     GDBusMethodInvocation *invocation,
-    const gchar *value)
+    GVariant *value)
 {
   g_dbus_method_invocation_return_value (invocation,
-    g_variant_new ("(^ay)",
+    g_variant_new ("(@ay)",
                    value));
 }
 
@@ -9267,18 +9267,16 @@ gatt_characteristic1_proxy_get_service (GattCharacteristic1 *object)
   return value;
 }
 
-static const gchar *
+static GVariant *
 gatt_characteristic1_proxy_get_value (GattCharacteristic1 *object)
 {
   GattCharacteristic1Proxy *proxy = GATT_CHARACTERISTIC1_PROXY (object);
   GVariant *variant;
-  const gchar *value = NULL;
+  GVariant *value = NULL;
   variant = g_dbus_proxy_get_cached_property (G_DBUS_PROXY (proxy), "Value");
+  value = variant;
   if (variant != NULL)
-    {
-      value = g_variant_get_bytestring (variant);
-      g_variant_unref (variant);
-    }
+    g_variant_unref (variant);
   return value;
 }
 
@@ -9964,7 +9962,7 @@ gatt_characteristic1_skeleton_init (GattCharacteristic1Skeleton *skeleton)
   skeleton->priv->properties = g_new0 (GValue, 6);
   g_value_init (&skeleton->priv->properties[0], G_TYPE_STRING);
   g_value_init (&skeleton->priv->properties[1], G_TYPE_STRING);
-  g_value_init (&skeleton->priv->properties[2], G_TYPE_STRING);
+  g_value_init (&skeleton->priv->properties[2], G_TYPE_VARIANT);
   g_value_init (&skeleton->priv->properties[3], G_TYPE_BOOLEAN);
   g_value_init (&skeleton->priv->properties[4], G_TYPE_STRV);
   g_value_init (&skeleton->priv->properties[5], G_TYPE_STRV);
@@ -9992,13 +9990,13 @@ gatt_characteristic1_skeleton_get_service (GattCharacteristic1 *object)
   return value;
 }
 
-static const gchar *
+static GVariant *
 gatt_characteristic1_skeleton_get_value (GattCharacteristic1 *object)
 {
   GattCharacteristic1Skeleton *skeleton = GATT_CHARACTERISTIC1_SKELETON (object);
-  const gchar *value;
+  GVariant *value;
   g_mutex_lock (&skeleton->priv->lock);
-  value = g_value_get_string (&(skeleton->priv->properties[2]));
+  value = g_value_get_variant (&(skeleton->priv->properties[2]));
   g_mutex_unlock (&skeleton->priv->lock);
   return value;
 }
@@ -10126,7 +10124,7 @@ static const _ExtendedGDBusArgInfo _gatt_descriptor1_method_info_read_value_OUT_
     (gchar *) "ay",
     NULL
   },
-  FALSE
+  TRUE
 };
 
 static const _ExtendedGDBusArgInfo * const _gatt_descriptor1_method_info_read_value_OUT_ARG_pointers[] =
@@ -10156,7 +10154,7 @@ static const _ExtendedGDBusArgInfo _gatt_descriptor1_method_info_write_value_IN_
     (gchar *) "ay",
     NULL
   },
-  FALSE
+  TRUE
 };
 
 static const _ExtendedGDBusArgInfo _gatt_descriptor1_method_info_write_value_IN_ARG_options =
@@ -10233,7 +10231,7 @@ static const _ExtendedGDBusPropertyInfo _gatt_descriptor1_property_info_value =
     NULL
   },
   "value",
-  FALSE
+  TRUE
 };
 
 static const _ExtendedGDBusPropertyInfo * const _gatt_descriptor1_property_info_pointers[] =
@@ -10362,7 +10360,7 @@ gatt_descriptor1_default_init (GattDescriptor1Iface *iface)
     g_cclosure_marshal_generic,
     G_TYPE_BOOLEAN,
     3,
-    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_STRING, G_TYPE_VARIANT);
+    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_VARIANT, G_TYPE_VARIANT);
 
   /* GObject properties for D-Bus properties: */
   /**
@@ -10391,7 +10389,7 @@ gatt_descriptor1_default_init (GattDescriptor1Iface *iface)
    * Since the D-Bus property for this #GObject property is readable but not writable, it is meaningful to read from it on both the client- and service-side. It is only meaningful, however, to write to it on the service-side.
    */
   g_object_interface_install_property (iface,
-    g_param_spec_string ("value", "Value", "Value", NULL, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+    g_param_spec_variant ("value", "Value", "Value", G_VARIANT_TYPE ("ay"), NULL, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -10508,7 +10506,7 @@ gatt_descriptor1_set_characteristic (GattDescriptor1 *object, const gchar *value
  *
  * Returns: (transfer none): The property value or %NULL if the property is not set. Do not free the returned value, it belongs to @object.
  */
-const gchar *
+GVariant *
 gatt_descriptor1_get_value (GattDescriptor1 *object)
 {
   return GATT_DESCRIPTOR1_GET_IFACE (object)->get_value (object);
@@ -10522,12 +10520,12 @@ gatt_descriptor1_get_value (GattDescriptor1 *object)
  *
  * Since this D-Bus property is readable, it is meaningful to use this function on both the client- and service-side.
  *
- * Returns: (transfer full): The property value or %NULL if the property is not set. The returned value should be freed with g_free().
+ * Returns: (transfer full): The property value or %NULL if the property is not set. The returned value should be freed with g_variant_unref().
  */
-gchar *
+GVariant *
 gatt_descriptor1_dup_value (GattDescriptor1 *object)
 {
-  gchar *value;
+  GVariant *value;
   g_object_get (G_OBJECT (object), "value", &value, NULL);
   return value;
 }
@@ -10542,7 +10540,7 @@ gatt_descriptor1_dup_value (GattDescriptor1 *object)
  * Since this D-Bus property is not writable, it is only meaningful to use this function on the service-side.
  */
 void
-gatt_descriptor1_set_value (GattDescriptor1 *object, const gchar *value)
+gatt_descriptor1_set_value (GattDescriptor1 *object, GVariant *value)
 {
   g_object_set (G_OBJECT (object), "value", value, NULL);
 }
@@ -10594,7 +10592,7 @@ gatt_descriptor1_call_read_value (
 gboolean
 gatt_descriptor1_call_read_value_finish (
     GattDescriptor1 *proxy,
-    gchar **out_value,
+    GVariant **out_value,
     GAsyncResult *res,
     GError **error)
 {
@@ -10603,7 +10601,7 @@ gatt_descriptor1_call_read_value_finish (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(^ay)",
+                 "(@ay)",
                  out_value);
   g_variant_unref (_ret);
 _out:
@@ -10628,7 +10626,7 @@ gboolean
 gatt_descriptor1_call_read_value_sync (
     GattDescriptor1 *proxy,
     GVariant *arg_options,
-    gchar **out_value,
+    GVariant **out_value,
     GCancellable *cancellable,
     GError **error)
 {
@@ -10644,7 +10642,7 @@ gatt_descriptor1_call_read_value_sync (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(^ay)",
+                 "(@ay)",
                  out_value);
   g_variant_unref (_ret);
 _out:
@@ -10669,7 +10667,7 @@ _out:
 void
 gatt_descriptor1_call_write_value (
     GattDescriptor1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
@@ -10677,7 +10675,7 @@ gatt_descriptor1_call_write_value (
 {
   g_dbus_proxy_call (G_DBUS_PROXY (proxy),
     "WriteValue",
-    g_variant_new ("(^ay@a{sv})",
+    g_variant_new ("(@ay@a{sv})",
                    arg_value,
                    arg_options),
     G_DBUS_CALL_FLAGS_NONE,
@@ -10731,7 +10729,7 @@ _out:
 gboolean
 gatt_descriptor1_call_write_value_sync (
     GattDescriptor1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GError **error)
@@ -10739,7 +10737,7 @@ gatt_descriptor1_call_write_value_sync (
   GVariant *_ret;
   _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
     "WriteValue",
-    g_variant_new ("(^ay@a{sv})",
+    g_variant_new ("(@ay@a{sv})",
                    arg_value,
                    arg_options),
     G_DBUS_CALL_FLAGS_NONE,
@@ -10769,10 +10767,10 @@ void
 gatt_descriptor1_complete_read_value (
     GattDescriptor1 *object,
     GDBusMethodInvocation *invocation,
-    const gchar *value)
+    GVariant *value)
 {
   g_dbus_method_invocation_return_value (invocation,
-    g_variant_new ("(^ay)",
+    g_variant_new ("(@ay)",
                    value));
 }
 
@@ -11001,18 +10999,16 @@ gatt_descriptor1_proxy_get_characteristic (GattDescriptor1 *object)
   return value;
 }
 
-static const gchar *
+static GVariant *
 gatt_descriptor1_proxy_get_value (GattDescriptor1 *object)
 {
   GattDescriptor1Proxy *proxy = GATT_DESCRIPTOR1_PROXY (object);
   GVariant *variant;
-  const gchar *value = NULL;
+  GVariant *value = NULL;
   variant = g_dbus_proxy_get_cached_property (G_DBUS_PROXY (proxy), "Value");
+  value = variant;
   if (variant != NULL)
-    {
-      value = g_variant_get_bytestring (variant);
-      g_variant_unref (variant);
-    }
+    g_variant_unref (variant);
   return value;
 }
 
@@ -11646,7 +11642,7 @@ gatt_descriptor1_skeleton_init (GattDescriptor1Skeleton *skeleton)
   skeleton->priv->properties = g_new0 (GValue, 3);
   g_value_init (&skeleton->priv->properties[0], G_TYPE_STRING);
   g_value_init (&skeleton->priv->properties[1], G_TYPE_STRING);
-  g_value_init (&skeleton->priv->properties[2], G_TYPE_STRING);
+  g_value_init (&skeleton->priv->properties[2], G_TYPE_VARIANT);
 }
 
 static const gchar *
@@ -11671,13 +11667,13 @@ gatt_descriptor1_skeleton_get_characteristic (GattDescriptor1 *object)
   return value;
 }
 
-static const gchar *
+static GVariant *
 gatt_descriptor1_skeleton_get_value (GattDescriptor1 *object)
 {
   GattDescriptor1Skeleton *skeleton = GATT_DESCRIPTOR1_SKELETON (object);
-  const gchar *value;
+  GVariant *value;
   g_mutex_lock (&skeleton->priv->lock);
-  value = g_value_get_string (&(skeleton->priv->properties[2]));
+  value = g_value_get_variant (&(skeleton->priv->properties[2]));
   g_mutex_unlock (&skeleton->priv->lock);
   return value;
 }

@@ -70,12 +70,15 @@ int main(int argc, char **argv)
         std::cerr << "Error while initializing libtinyb: " << e.what() << std::endl;
         exit(1);
     }
-    /* Get Adapter Info */
+    /* Get Adapter Info  and set discovery filter*/
     auto adapters=manager->get_adapters();
+    std::vector<std::string> uuids;
+    uuids.push_back("3C111001-C75C-50C4-1F1A-6789E2AFDE4E");
     for(auto it=adapters.begin();it!=adapters.end();it++){
         std::cout<<"Interface = "<<(*it)->get_interface_name()<<" ";
         std::cout<<"Address = "<<(*it)->get_address()<<" ";
         std::cout<<"Name = "<<(*it)->get_name()<<std::endl;
+        (*it)->set_discovery_filter(uuids);
     }
     /* Start the discovery of devices */
     bool ret = manager->start_discovery();

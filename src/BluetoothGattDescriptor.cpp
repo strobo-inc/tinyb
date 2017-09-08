@@ -129,6 +129,7 @@ std::vector<unsigned char> BluetoothGattDescriptor::read_value (uint16_t offset)
 {
     GError *error = NULL;
     GBytes *result_gbytes;
+    GVariant*result_variant;
 
     GVariantDict dict;
     g_variant_dict_init(&dict, NULL);
@@ -140,17 +141,18 @@ std::vector<unsigned char> BluetoothGattDescriptor::read_value (uint16_t offset)
 
     gatt_descriptor1_call_read_value_sync(
         object,
-        &result_gbytes,
         variant,
+        &result_variant,
         NULL,
         &error
     );
     handle_error(error);
+    result_gbytes=g_variant_get_data_as_bytes(result_variant);
 
     std::vector<unsigned char> result = from_gbytes_to_vector(result_gbytes);
 
     /* unref the gbytes pointer */
-    g_bytes_unref(result_gbytes);
+    g_variant_unref(result_variant);
 
     return result;
 }
@@ -160,8 +162,10 @@ bool BluetoothGattDescriptor::write_value (
 {
     GError *error = NULL;
     bool result;
+    gboolean trusted=true;
 
     GBytes *arg_value_gbytes = from_vector_to_gbytes(arg_value);
+    GVariant*arg_variant= g_variant_new_from_bytes(G_VARIANT_TYPE_BYTESTRING,arg_value_gbytes,trusted);
 
     GVariantDict dict;
     g_variant_dict_init(&dict, NULL);
@@ -173,7 +177,7 @@ bool BluetoothGattDescriptor::write_value (
 
     result = gatt_descriptor1_call_write_value_sync(
         object,
-        arg_value_gbytes,
+        arg_variant,
         variant,
         NULL,
         &error
@@ -239,7 +243,8 @@ BluetoothGattCharacteristic BluetoothGattDescriptor::get_characteristic ()
 
 std::vector<unsigned char> BluetoothGattDescriptor::get_value ()
 {
-    GBytes *value_gbytes = const_cast<GBytes *>(gatt_descriptor1_get_value (object));
+    GVariant* value_variant=gatt_descriptor1_get_value(object);
+    GBytes *value_gbytes = g_variant_get_data_as_bytes(value_variant);
     std::vector<unsigned char> result;
     try {
         result = from_gbytes_to_vector(value_gbytes);
@@ -248,7 +253,7 @@ std::vector<unsigned char> BluetoothGattDescriptor::get_value ()
         throw e;
     }
 
-    g_bytes_unref(value_gbytes);
+    g_variant_unref(value_variant);
 
     return result;
 }

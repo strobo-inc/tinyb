@@ -869,7 +869,7 @@ struct _GattCharacteristic1Iface
   gboolean (*handle_write_value) (
     GattCharacteristic1 *object,
     GDBusMethodInvocation *invocation,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options);
 
   const gchar *const * (*get_descriptors) (GattCharacteristic1 *object);
@@ -882,7 +882,7 @@ struct _GattCharacteristic1Iface
 
   const gchar * (*get_uuid) (GattCharacteristic1 *object);
 
-  const gchar * (*get_value) (GattCharacteristic1 *object);
+  GVariant * (*get_value) (GattCharacteristic1 *object);
 
 };
 
@@ -896,7 +896,7 @@ guint gatt_characteristic1_override_properties (GObjectClass *klass, guint prope
 void gatt_characteristic1_complete_read_value (
     GattCharacteristic1 *object,
     GDBusMethodInvocation *invocation,
-    const gchar *value);
+    GVariant *value);
 
 void gatt_characteristic1_complete_write_value (
     GattCharacteristic1 *object,
@@ -922,20 +922,20 @@ void gatt_characteristic1_call_read_value (
 
 gboolean gatt_characteristic1_call_read_value_finish (
     GattCharacteristic1 *proxy,
-    gchar **out_value,
+    GVariant **out_value,
     GAsyncResult *res,
     GError **error);
 
 gboolean gatt_characteristic1_call_read_value_sync (
     GattCharacteristic1 *proxy,
     GVariant *arg_options,
-    gchar **out_value,
+    GVariant **out_value,
     GCancellable *cancellable,
     GError **error);
 
 void gatt_characteristic1_call_write_value (
     GattCharacteristic1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
@@ -948,7 +948,7 @@ gboolean gatt_characteristic1_call_write_value_finish (
 
 gboolean gatt_characteristic1_call_write_value_sync (
     GattCharacteristic1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GError **error);
@@ -996,9 +996,9 @@ const gchar *gatt_characteristic1_get_service (GattCharacteristic1 *object);
 gchar *gatt_characteristic1_dup_service (GattCharacteristic1 *object);
 void gatt_characteristic1_set_service (GattCharacteristic1 *object, const gchar *value);
 
-const gchar *gatt_characteristic1_get_value (GattCharacteristic1 *object);
-gchar *gatt_characteristic1_dup_value (GattCharacteristic1 *object);
-void gatt_characteristic1_set_value (GattCharacteristic1 *object, const gchar *value);
+GVariant *gatt_characteristic1_get_value (GattCharacteristic1 *object);
+GVariant *gatt_characteristic1_dup_value (GattCharacteristic1 *object);
+void gatt_characteristic1_set_value (GattCharacteristic1 *object, GVariant *value);
 
 gboolean gatt_characteristic1_get_notifying (GattCharacteristic1 *object);
 void gatt_characteristic1_set_notifying (GattCharacteristic1 *object, gboolean value);
@@ -1133,14 +1133,14 @@ struct _GattDescriptor1Iface
   gboolean (*handle_write_value) (
     GattDescriptor1 *object,
     GDBusMethodInvocation *invocation,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options);
 
   const gchar * (*get_characteristic) (GattDescriptor1 *object);
 
   const gchar * (*get_uuid) (GattDescriptor1 *object);
 
-  const gchar * (*get_value) (GattDescriptor1 *object);
+  GVariant * (*get_value) (GattDescriptor1 *object);
 
 };
 
@@ -1154,7 +1154,7 @@ guint gatt_descriptor1_override_properties (GObjectClass *klass, guint property_
 void gatt_descriptor1_complete_read_value (
     GattDescriptor1 *object,
     GDBusMethodInvocation *invocation,
-    const gchar *value);
+    GVariant *value);
 
 void gatt_descriptor1_complete_write_value (
     GattDescriptor1 *object,
@@ -1172,20 +1172,20 @@ void gatt_descriptor1_call_read_value (
 
 gboolean gatt_descriptor1_call_read_value_finish (
     GattDescriptor1 *proxy,
-    gchar **out_value,
+    GVariant **out_value,
     GAsyncResult *res,
     GError **error);
 
 gboolean gatt_descriptor1_call_read_value_sync (
     GattDescriptor1 *proxy,
     GVariant *arg_options,
-    gchar **out_value,
+    GVariant **out_value,
     GCancellable *cancellable,
     GError **error);
 
 void gatt_descriptor1_call_write_value (
     GattDescriptor1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
@@ -1198,7 +1198,7 @@ gboolean gatt_descriptor1_call_write_value_finish (
 
 gboolean gatt_descriptor1_call_write_value_sync (
     GattDescriptor1 *proxy,
-    const gchar *arg_value,
+    GVariant *arg_value,
     GVariant *arg_options,
     GCancellable *cancellable,
     GError **error);
@@ -1214,9 +1214,9 @@ const gchar *gatt_descriptor1_get_characteristic (GattDescriptor1 *object);
 gchar *gatt_descriptor1_dup_characteristic (GattDescriptor1 *object);
 void gatt_descriptor1_set_characteristic (GattDescriptor1 *object, const gchar *value);
 
-const gchar *gatt_descriptor1_get_value (GattDescriptor1 *object);
-gchar *gatt_descriptor1_dup_value (GattDescriptor1 *object);
-void gatt_descriptor1_set_value (GattDescriptor1 *object, const gchar *value);
+GVariant *gatt_descriptor1_get_value (GattDescriptor1 *object);
+GVariant *gatt_descriptor1_dup_value (GattDescriptor1 *object);
+void gatt_descriptor1_set_value (GattDescriptor1 *object, GVariant *value);
 
 
 /* ---- */
