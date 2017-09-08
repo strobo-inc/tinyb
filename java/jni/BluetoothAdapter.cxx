@@ -206,6 +206,27 @@ jstring Java_tinyb_BluetoothAdapter_getName(JNIEnv *env, jobject obj)
     return nullptr;
 }
 
+jstring Java_tinyb_BluetoothAdapter_getInterfaceName(JNIEnv *env,jobject obj)
+{
+    try{
+        BluetoothAdapter *obj_adapter = getInstance<BluetoothAdapter>(env,obj);
+        std::string interface_name = obj_adapter->get_interface_name();
+
+        return env->NewStringUTF((const char*)interface_name.c_str());
+    }catch(std::bad_alloc&e){
+        raise_java_oom_exception(env,e);
+    }catch(BluetoothException &e){
+        raise_java_bluetooth_exception(env,e);
+    }catch(std::runtime_error &e){
+        raise_java_runtime_exception(env,e);
+    }catch(std::invalid_argument &e){
+        raise_java_invalid_arg_exception(env,e);
+    }catch(std::exception &e){
+        raise_java_exception(env,e);
+    }
+    return nullptr;
+}
+
 jstring Java_tinyb_BluetoothAdapter_getAlias(JNIEnv *env, jobject obj)
 {
     try {
