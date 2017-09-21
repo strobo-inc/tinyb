@@ -108,6 +108,16 @@ public class HelloTinyB {
          */
         BluetoothManager manager = BluetoothManager.getBluetoothManager();
 
+        /**
+         * set discovery filter
+         */
+        String[]uuids=new String[1];
+        uuids[0]="3C111001-C75C-50C4-1F1A-6789E2AFDE4E";
+        List<BluetoothAdapter>adapters=manager.getAdapters();
+        for (BluetoothAdapter adapter:adapters) {
+            adapter.setDiscoveryFilter(uuids,(short)0,(short)0);
+        }
+
         /*
          * The manager will try to initialize a BluetoothAdapter if any adapter is present in the system. To initialize
          * discovery we can call startDiscovery, which will put the default adapter in discovery mode.

@@ -81,6 +81,14 @@ public class BluetoothAdapter extends BluetoothObject
       */
     public native boolean stopDiscovery() throws BluetoothException;
 
+    /** Set discovery filters
+     *  @parameter uuids
+     *  @parameter rssi
+     *  @parameter pathloss
+    */
+    public native boolean setDiscoveryFilter(String[]uuids,short rssi,short pathloss) throws BluetoothException;
+
+
     /** Returns a list of BluetoothDevices visible from this adapter.
       * @return A list of BluetoothDevices visible on this adapter,
       * NULL if an error occurred

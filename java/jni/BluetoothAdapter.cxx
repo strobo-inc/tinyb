@@ -25,6 +25,7 @@
 #include "tinyb/BluetoothAdapter.hpp"
 #include "tinyb/BluetoothDevice.hpp"
 #include "tinyb/BluetoothObject.hpp"
+#include "tinyb/BluetoothUUID.hpp"
 
 #include "tinyb_BluetoothAdapter.h"
 
@@ -109,6 +110,47 @@ jboolean Java_tinyb_BluetoothAdapter_stopDiscovery(JNIEnv *env, jobject obj)
         raise_java_exception(env, e);
     }
     return JNI_FALSE;
+}
+
+jboolean Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj, jobjectArray uuids, jshort rssi, jshort pathloss){
+    bool retval=false;
+    try{
+        BluetoothAdapter *obj_adapter = getInstance<BluetoothAdapter>(env,obj);
+        jsize uuid_array_length=env->GetArrayLength(uuids);
+        std::vector<BluetoothUUID> uuid_vect;
+        uuid_vect.reserve(uuid_array_length);
+        for(int i=0 ;i<uuid_array_length;i++){
+            jobject str_obj =env->GetObjectArrayElement(uuids,i);
+            jclass string_class=search_class(env,"java/lang/String");
+            if(env->IsInstanceOf(str_obj,string_class)==JNI_TRUE){
+                jstring jstr=(jstring)str_obj;
+                const char* buff=env->GetStringUTFChars(jstr, nullptr);
+                BluetoothUUID uuid(buff);
+                std::cout<<"BluetoothAdapter(JNI)::setDiscoveryFilter  "<<uuid.get_string()<<std::endl;
+                uuid_vect.push_back(uuid);
+                env->ReleaseStringUTFChars(jstr,buff);
+            }
+
+            /*jclass string_class=search_class(env,str_obj);
+            jmethodID method_toString_id=search_method(env,string_class,"()Ljava/lang/String",false);
+            jstring str= */
+        }
+        retval =obj_adapter->set_discovery_filter(uuid_vect,rssi,pathloss);
+
+
+
+    }catch(std::bad_alloc&e){
+        raise_java_oom_exception(env,e);
+    }catch(BluetoothException &e){
+        raise_java_bluetooth_exception(env,e);
+    }catch(std::runtime_error &e){
+        raise_java_runtime_exception(env,e);
+    }catch(std::invalid_argument &e){
+        raise_java_invalid_arg_exception(env,e);
+    }catch(std::exception &e){
+        raise_java_exception(env,e);
+    }
+    return retval?JNI_TRUE:JNI_FALSE;
 }
 
 jobject Java_tinyb_BluetoothAdapter_getDevices(JNIEnv *env, jobject obj)
