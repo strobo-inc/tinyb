@@ -115,7 +115,7 @@ public class HelloTinyB {
         uuids[0]="3C111001-C75C-50C4-1F1A-6789E2AFDE4E";
         List<BluetoothAdapter>adapters=manager.getAdapters();
         for (BluetoothAdapter adapter:adapters) {
-            adapter.setDiscoveryFilter(uuids,(short)0,(short)0);
+            adapter.setDiscoveryFilter(uuids,(short)0,(short)0,BluetoothAdapter.TransportType.AUTO);
         }
 
         /*

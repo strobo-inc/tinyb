@@ -34,10 +34,10 @@ struct _Adapter1;
 typedef struct _Adapter1 Adapter1;
 
 enum class TransportType{
-    AUTO,
-    BREDR,
-    LE,
-    NONE
+    AUTO=0,
+    BREDR=1,
+    LE=2,
+    NONE=3
 };
 
 /**

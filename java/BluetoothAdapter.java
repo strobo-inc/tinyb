@@ -33,6 +33,29 @@ import java.time.Duration;
   */
 public class BluetoothAdapter extends BluetoothObject
 {
+    /**
+     * Transport parameter determines the type of
+     scan.
+
+     Possible values:
+     "AUTO"  - interleaved scan
+     "BREDR" - BR/EDR inquiry
+     "LE"    - LE scan only
+     */
+    public enum TransportType{
+        AUTO(0),
+        BREDR(1),
+        LE(2),
+        NONE(3),;
+
+        private final int value;
+        private TransportType(int value){
+            this.value=value;
+        }
+        public int getValue(){
+            return this.value;
+        }
+    }
     public native BluetoothType getBluetoothType();
     public native BluetoothAdapter clone();
 
@@ -82,12 +105,13 @@ public class BluetoothAdapter extends BluetoothObject
     public native boolean stopDiscovery() throws BluetoothException;
 
     /** Set discovery filters
-     *  @parameter uuids
-     *  @parameter rssi
-     *  @parameter pathloss
+     *  @parameter uuids Filter by service UUIDs, empty means match any UUID
+     *  @parameter rssi RSSI threshold value
+     *  @parameter pathloss Pathloss threshold value
+     *  @parameter transportType
      *  @return TRUE if discovery filter was successfully set
     */
-    public native boolean setDiscoveryFilter(String[]uuids,short rssi,short pathloss) throws BluetoothException;
+    public native boolean setDiscoveryFilter(String[]uuids,short rssi,short pathloss,TransportType transportType) throws BluetoothException;
 
 
     /** Returns a list of BluetoothDevices visible from this adapter.

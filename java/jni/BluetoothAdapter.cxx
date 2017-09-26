@@ -112,7 +112,7 @@ jboolean Java_tinyb_BluetoothAdapter_stopDiscovery(JNIEnv *env, jobject obj)
     return JNI_FALSE;
 }
 
-jboolean Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj, jobjectArray uuids, jshort rssi, jshort pathloss){
+jboolean Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj, jobjectArray uuids, jshort rssi, jshort pathloss,jobject transport_type){
     bool retval=false;
     try {
         BluetoothAdapter *obj_adapter = getInstance<BluetoothAdapter>(env,obj);
@@ -131,7 +131,11 @@ jboolean Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj
                 env->ReleaseStringUTFChars(jstr,buff);
             }
         }
-        retval =obj_adapter->set_discovery_filter(uuid_vect,rssi,pathloss);
+        jclass transport_type_class = search_class(env,"tinyb/BluetoothAdapter$TransportType");
+        jmethodID get_value_id = search_method(env,transport_type_class,"getValue","()I",false);
+        jint transport_type_val = env->CallIntMethod(transport_type,get_value_id);
+
+        retval =obj_adapter->set_discovery_filter(uuid_vect,rssi,pathloss, static_cast<TransportType>(transport_type_val));
 
     } catch(std::bad_alloc&e) {
         raise_java_oom_exception(env, e);
