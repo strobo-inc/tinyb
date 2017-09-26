@@ -367,6 +367,7 @@ void Java_tinyb_BluetoothAdapter_enablePoweredNotifications(JNIEnv *env, jobject
                 jmethodID constructor = search_method(*jni_env, boolean_cls, "<init>", "(Z)V", false);
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
+                jni_env->DeleteLocalRef(boolean_cls);
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
@@ -458,6 +459,7 @@ void Java_tinyb_BluetoothAdapter_enableDiscoverableNotifications(JNIEnv *env, jo
                 jmethodID constructor = search_method(*jni_env, boolean_cls, "<init>", "(Z)V", false);
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
+                jni_env->DeleteLocalRef(boolean_cls);
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
@@ -572,6 +574,7 @@ void Java_tinyb_BluetoothAdapter_enablePairableNotifications(JNIEnv *env, jobjec
                 jmethodID constructor = search_method(*jni_env, boolean_cls, "<init>", "(Z)V", false);
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
+                jni_env->DeleteLocalRef(boolean_cls);
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
@@ -706,6 +709,7 @@ void Java_tinyb_BluetoothAdapter_enableDiscoveringNotifications(JNIEnv *env, job
                 jmethodID constructor = search_method(*jni_env, boolean_cls, "<init>", "(Z)V", false);
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
+                jni_env->DeleteLocalRef(boolean_cls);
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
