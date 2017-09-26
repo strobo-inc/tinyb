@@ -153,17 +153,7 @@ std::unique_ptr<BluetoothAdapter> BluetoothAdapter::make(Object *object,
 
     return std::unique_ptr<BluetoothAdapter>();
 }
-std::string BluetoothAdapter::get_interface_name(){
-    auto my_object_path=get_object_path();
-    std::vector<std::string> splitted;
-    std::stringstream path_text_stream(my_object_path);
-    std::string choppedstring;
-    while(std::getline(path_text_stream,choppedstring,'/')){
-        splitted.push_back(choppedstring);
-        choppedstring.clear();
-    }
-    return splitted[splitted.size()-1];
-}
+
 std::vector<std::unique_ptr<BluetoothDevice>> BluetoothAdapter::get_devices()
 {
     std::vector<std::unique_ptr<BluetoothDevice>> vector;
