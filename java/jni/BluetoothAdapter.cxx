@@ -134,8 +134,12 @@ jboolean Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj
         jclass transport_type_class = search_class(env,"tinyb/BluetoothAdapter$TransportType");
         jmethodID get_value_id = search_method(env,transport_type_class,"getValue","()I",false);
         jint transport_type_val = env->CallIntMethod(transport_type,get_value_id);
+        if(pathloss<0){
+            pathloss = 0;
+        }
 
-        retval =obj_adapter->set_discovery_filter(uuid_vect,rssi,pathloss, static_cast<TransportType>(transport_type_val));
+
+        retval =obj_adapter->set_discovery_filter(uuid_vect,rssi, pathloss, static_cast<TransportType>(transport_type_val));
 
     } catch(std::bad_alloc&e) {
         raise_java_oom_exception(env, e);
