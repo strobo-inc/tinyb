@@ -2,11 +2,12 @@ FROM strobo/docker-arm-build
 
 RUN [ "cross-build-start" ]
 
-RUN apt-get update && apt-get install -y\
+RUN echo deb http://ftp.debian.org/debian jessie-backports main >>/etc/apt/sources.list \
+&& apt-get update && apt-get install -y\
   git \
   cmake \
-  libglib2.0-0=2.42.1-1+b1 \
-  libglib2.0-dev=2.42.1-1+b1 \
+  libglib2.0-0 \
+  libglib2.0-dev \
   make \
   gcc \
   g++ \
