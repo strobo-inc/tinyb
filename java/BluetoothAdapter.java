@@ -85,6 +85,7 @@ public class BluetoothAdapter extends BluetoothObject
      *  @parameter uuids
      *  @parameter rssi
      *  @parameter pathloss
+     *  @return TRUE if discovery filter was successfully set
     */
     public native boolean setDiscoveryFilter(String[]uuids,short rssi,short pathloss) throws BluetoothException;
 
