@@ -2,6 +2,7 @@
 
 set -ex
 
-docker build -f Dockerfile.arm -t tinyb --rm .
+docker build -f Dockerfile -t tinyb --rm .
 docker run --name tinyb tinyb
 docker cp tinyb:/work/build .
+docker rm tinyb
