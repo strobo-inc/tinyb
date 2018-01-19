@@ -1,4 +1,4 @@
-FROM strobo/docker-arm-build
+FROM resin/raspberry-pi-openjdk:openjdk-8-jdk
 
 RUN [ "cross-build-start" ]
 
@@ -19,14 +19,14 @@ RUN echo deb http://ftp.debian.org/debian jessie-backports main >>/etc/apt/sourc
 RUN mkdir /work
 WORKDIR /work
 
-RUN wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-arm32-vfp-hflt.tar.gz
+#RUN wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+#http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-arm32-vfp-hflt.tar.gz
 
-RUN mkdir -p /usr/java \
-&& cd /usr/java \
-&& tar -xzvf /work/jdk-8u161-linux-arm32-vfp-hflt.tar.gz
+#RUN mkdir -p /usr/java \
+#&& cd /usr/java \
+#&& tar -xzvf /work/jdk-8u161-linux-arm32-vfp-hflt.tar.gz
 
-ENV JAVA_HOME=/usr/java/jdk1.8.0_161 PATH=$PATH:$JAVA_HOME/bin
+#ENV JAVA_HOME=/usr/java/jdk1.8.0_161 PATH=$PATH:$JAVA_HOME/bin
 
 COPY api/ api/
 COPY cmake/ cmake/
