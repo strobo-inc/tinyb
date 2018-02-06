@@ -44,8 +44,8 @@ RUN mkdir build \
  && cd build \
  && cmake .. \
     -DBUILDJAVA=ON \
-    -DCMAKE_CXX_FLAGS="-std=c++11 -march=armv6" \
-    -DCMAKE_C_FLAGS="-march=armv6"\
+    -DCMAKE_CXX_FLAGS="-std=c++11 -mcpu=arm1176jz-s -mfloat-abi=hard -mfpu=vfp" \
+    -DCMAKE_C_FLAGS="-mcpu=arm1176jz-s -mfloat-abi=hard -mfpu=vfp"\
     -DCMAKE_BUILD_TYPE=Release
 
 RUN cd build \
