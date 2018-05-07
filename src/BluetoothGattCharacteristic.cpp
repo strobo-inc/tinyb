@@ -214,6 +214,9 @@ bool BluetoothGattCharacteristic::disable_value_notifications()
 bool BluetoothGattCharacteristic::start_notify ()
 {
     GError *error = NULL;
+    if(object == nullptr){
+        return false;
+    }
     bool result;
     result = gatt_characteristic1_call_start_notify_sync(
         object,
@@ -228,6 +231,9 @@ bool BluetoothGattCharacteristic::start_notify ()
 bool BluetoothGattCharacteristic::stop_notify ()
 {
     GError *error = NULL;
+    if(object == nullptr){
+        return false;
+    }
     bool result;
     result = gatt_characteristic1_call_stop_notify_sync(
         object,
