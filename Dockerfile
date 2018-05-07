@@ -46,7 +46,7 @@ RUN mkdir build \
     -DBUILDJAVA=ON \
     -DCMAKE_CXX_FLAGS="-std=c++11 -mcpu=arm1176jz-s -mfloat-abi=hard -mfpu=vfp" \
     -DCMAKE_C_FLAGS="-mcpu=arm1176jz-s -mfloat-abi=hard -mfpu=vfp"\
-    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_BUILD_TYPE=DEBUG
 
 RUN cd build \
  && make -j2 tinybjar \
