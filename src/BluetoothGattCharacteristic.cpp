@@ -247,6 +247,9 @@ std::string BluetoothGattCharacteristic::get_uuid ()
 BluetoothGattService BluetoothGattCharacteristic::get_service ()
 {
     GError *error = NULL;
+    if(object== nullptr){
+        throw BluetoothException("Error occured while instantiating service");
+    }
 
     GattService1 *service = gatt_service1_proxy_new_for_bus_sync(
         G_BUS_TYPE_SYSTEM,
@@ -258,8 +261,10 @@ BluetoothGattService BluetoothGattCharacteristic::get_service ()
 
     if (service == nullptr) {
         std::string error_msg("Error occured while instantiating service: ");
-        error_msg += error->message;
-        g_error_free(error);
+        if(error!= nullptr) {
+            error_msg += error->message;
+            g_error_free(error);
+        }
         throw BluetoothException(error_msg);
     }
 

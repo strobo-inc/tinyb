@@ -102,6 +102,10 @@ std::string BluetoothGattService::get_uuid ()
 BluetoothDevice BluetoothGattService::get_device ()
 {
     GError *error = NULL;
+    if(object== nullptr){
+        std::string error_msg("Error occured while instantiating device: Object is null");
+        throw BluetoothException(error_msg);
+    }
 
     Device1 *device = device1_proxy_new_for_bus_sync(
         G_BUS_TYPE_SYSTEM,
@@ -113,8 +117,10 @@ BluetoothDevice BluetoothGattService::get_device ()
 
     if (device == nullptr) {
         std::string error_msg("Error occured while instantiating device: ");
-        error_msg += error->message;
-        g_error_free(error);
+        if(error!= nullptr) {
+            error_msg += error->message;
+            g_error_free(error);
+        }
         throw BluetoothException(error_msg);
     }
 

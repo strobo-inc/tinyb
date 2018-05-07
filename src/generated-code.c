@@ -5808,6 +5808,9 @@ device1_proxy_new_for_bus_sync (
     GError             **error)
 {
   GInitable *ret;
+  if (object_path==0){//if object_path==0 error( illegal path)
+    return NULL;
+  }
   ret = g_initable_new (TYPE_DEVICE1_PROXY, cancellable, error, "g-flags", flags, "g-name", name, "g-bus-type", bus_type, "g-object-path", object_path, "g-interface-name", "org.bluez.Device1", NULL);
   if (ret != NULL)
     return DEVICE1 (ret);
@@ -7337,6 +7340,9 @@ gatt_service1_proxy_new_for_bus_sync (
     GCancellable        *cancellable,
     GError             **error)
 {
+  if(object_path==0){
+    return NULL;
+  }
   GInitable *ret;
   ret = g_initable_new (TYPE_GATT_SERVICE1_PROXY, cancellable, error, "g-flags", flags, "g-name", name, "g-bus-type", bus_type, "g-object-path", object_path, "g-interface-name", "org.bluez.GattService1", NULL);
   if (ret != NULL)
@@ -9546,6 +9552,9 @@ gatt_characteristic1_proxy_new_for_bus_sync (
     GError             **error)
 {
   GInitable *ret;
+  if(object_path==0){
+    return NULL;
+  }
   ret = g_initable_new (TYPE_GATT_CHARACTERISTIC1_PROXY, cancellable, error, "g-flags", flags, "g-name", name, "g-bus-type", bus_type, "g-object-path", object_path, "g-interface-name", "org.bluez.GattCharacteristic1", NULL);
   if (ret != NULL)
     return GATT_CHARACTERISTIC1 (ret);
