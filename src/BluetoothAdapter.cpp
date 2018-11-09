@@ -269,17 +269,26 @@ bool BluetoothAdapter::remove_device (
 /* D-Bus property accessors: */
 std::string BluetoothAdapter::get_address ()
 {
-    return std::string(adapter1_get_address (object));
+    gchar*p_address=adapter1_dup_address(object);
+    std::string address(p_address);
+    g_free(p_address);
+    return address;
 }
 
 std::string BluetoothAdapter::get_name ()
 {
-    return std::string(adapter1_get_name (object));
+    gchar*p_name=adapter1_dup_name(object);
+    std::string name(p_name);
+    g_free(p_name);
+    return name;
 }
 
 std::string BluetoothAdapter::get_alias ()
 {
-    return std::string(adapter1_get_alias (object));
+    gchar*p_alias=adapter1_dup_alias(object);
+    std::string alias(p_alias);
+    g_free(p_alias);
+    return alias;
 }
 
 void BluetoothAdapter::set_alias (const std::string &value)
@@ -398,17 +407,22 @@ void BluetoothAdapter::disable_discovering_notifications() {
 
 std::vector<std::string> BluetoothAdapter::get_uuids ()
 {
-    const char * const *uuids_c = adapter1_get_uuids (object);
+    gchar**uuids_c=adapter1_dup_uuids(object);
     std::vector<std::string> uuids;
     for (int i = 0; uuids_c[i] != NULL ;i++)
         uuids.push_back(std::string(uuids_c[i]));
+    g_strfreev(uuids_c);
     return uuids;
 }
 
 std::unique_ptr<std::string> BluetoothAdapter::get_modalias ()
 {
-    const gchar *modalias= adapter1_get_modalias (object);
-    if (modalias == nullptr)
+    gchar *modalias= adapter1_dup_modalias (object);
+    if (modalias == nullptr) {
+        g_free(modalias);
         return std::unique_ptr<std::string>();
-    return std::unique_ptr<std::string>(new std::string(modalias));
+    }
+    std::unique_ptr<std::string> modalias_str(new std::string(modalias));
+    g_free(modalias);
+    return modalias_str;
 }

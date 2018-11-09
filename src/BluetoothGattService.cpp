@@ -96,7 +96,10 @@ BluetoothGattService *BluetoothGattService::clone() const
 /* D-Bus property accessors: */
 std::string BluetoothGattService::get_uuid ()
 {
-    return std::string(gatt_service1_get_uuid (object));
+    gchar*uuid = gatt_service1_dup_uuid(object);
+    std::string retval(uuid);
+    g_free(uuid);
+    return retval;
 }
 
 BluetoothDevice BluetoothGattService::get_device ()
@@ -106,14 +109,15 @@ BluetoothDevice BluetoothGattService::get_device ()
         std::string error_msg("Error occured while instantiating device: Object is null");
         throw BluetoothException(error_msg);
     }
-
+    gchar*device_url = gatt_service1_dup_device(object);
     Device1 *device = device1_proxy_new_for_bus_sync(
         G_BUS_TYPE_SYSTEM,
         G_DBUS_PROXY_FLAGS_NONE,
         "org.bluez",
-        gatt_service1_get_device (object),
+        device_url,
         NULL,
         &error);
+    g_free(device_url);
 
     if (device == nullptr) {
         std::string error_msg("Error occured while instantiating device: ");

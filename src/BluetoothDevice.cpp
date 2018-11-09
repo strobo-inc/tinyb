@@ -322,20 +322,28 @@ bool BluetoothDevice::cancel_pairing ()
 /* D-Bus property accessors: */
 std::string BluetoothDevice::get_address ()
 {
-    return std::string(device1_get_address (object));
+    gchar*p_address=device1_dup_address(object);
+    std::string address(p_address);
+    g_free(p_address);
+    return address;
 }
 
 std::string BluetoothDevice::get_name ()
 {
-    const gchar *name = device1_get_name(object);
-    if (name == nullptr)
-        return std::string(device1_get_alias(object));
-    return std::string(name);
+    gchar *p_name = device1_dup_name(object);
+    if (p_name == nullptr)
+        return std::string(get_alias());
+    std::string name(p_name);
+    g_free(p_name);
+    return name;
 }
 
 std::string BluetoothDevice::get_alias ()
 {
-    return device1_get_alias (object);
+    gchar*p_alias= device1_dup_alias(object);
+    std::string alias(p_alias);
+    g_free(p_alias);
+    return alias;
 }
 
 void BluetoothDevice::set_alias (const std::string &value)
@@ -355,10 +363,12 @@ uint16_t BluetoothDevice::get_appearance ()
 
 std::unique_ptr<std::string> BluetoothDevice::get_icon ()
 {
-    const gchar *icon = device1_get_icon (object);
+    gchar *icon = device1_dup_icon (object);
     if (icon == nullptr)
         return std::unique_ptr<std::string>();
-    return std::unique_ptr<std::string>(new std::string(icon));
+    std::unique_ptr<std::string>p_icon(new std::string(icon));
+    g_free(icon);
+    return p_icon;
 }
 
 bool BluetoothDevice::get_paired ()
@@ -469,32 +479,36 @@ void BluetoothDevice::disable_connected_notifications() {
 std::vector<std::string> BluetoothDevice::get_uuids ()
 {
 
-    const char * const *uuids_c = device1_get_uuids (object);
+    gchar**uuids_c = device1_dup_uuids (object);
     std::vector<std::string> uuids;
     for (int i = 0; uuids_c[i] != NULL ;i++)
         uuids.push_back(std::string(uuids_c[i]));
+    g_strfreev(uuids_c);
     return uuids;
 }
 
 std::unique_ptr<std::string> BluetoothDevice::get_modalias ()
 {
-    const gchar *modalias= device1_get_modalias (object);
+    gchar *modalias= device1_dup_modalias (object);
     if (modalias == nullptr)
         return std::unique_ptr<std::string>();
-    return std::unique_ptr<std::string>(new std::string(modalias));
+    std::unique_ptr<std::string>p_modalias(new std::string(modalias));
+    g_free(modalias);
+    return p_modalias;
 }
 
 BluetoothAdapter BluetoothDevice::get_adapter ()
 {
     GError *error = NULL;
-
+    gchar*p_adapter=device1_dup_adapter(object);
     Adapter1 *adapter = adapter1_proxy_new_for_bus_sync(
         G_BUS_TYPE_SYSTEM,
         G_DBUS_PROXY_FLAGS_NONE,
         "org.bluez",
-        device1_get_adapter (object),
+        p_adapter,
         NULL,
         &error);
+    g_free(p_adapter);
 
    if (adapter == NULL) {
         std::string error_msg("Error occured while instantiating adapter: ");

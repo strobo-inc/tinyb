@@ -247,7 +247,10 @@ bool BluetoothGattCharacteristic::stop_notify ()
 /* D-Bus property accessors: */
 std::string BluetoothGattCharacteristic::get_uuid ()
 {
-    return std::string(gatt_characteristic1_get_uuid (object));
+    gchar*p_uuid=gatt_characteristic1_dup_uuid(object);
+    std::string uuid(p_uuid);
+    g_free(p_uuid);
+    return uuid;
 }
 
 BluetoothGattService BluetoothGattCharacteristic::get_service ()
@@ -256,14 +259,16 @@ BluetoothGattService BluetoothGattCharacteristic::get_service ()
     if(object== nullptr){
         throw BluetoothException("Error occured while instantiating service");
     }
+    gchar*p_service=gatt_characteristic1_dup_service(object);
 
     GattService1 *service = gatt_service1_proxy_new_for_bus_sync(
         G_BUS_TYPE_SYSTEM,
         G_DBUS_PROXY_FLAGS_NONE,
         "org.bluez",
-        gatt_characteristic1_get_service (object),
+        p_service,
         NULL,
         &error);
+    g_free(p_service);
 
     if (service == nullptr) {
         std::string error_msg("Error occured while instantiating service: ");
@@ -281,7 +286,7 @@ BluetoothGattService BluetoothGattCharacteristic::get_service ()
 
 std::vector<unsigned char> BluetoothGattCharacteristic::get_value ()
 {
-    GVariant*value_variant=gatt_characteristic1_get_value (object);
+    GVariant*value_variant=gatt_characteristic1_dup_value (object);
     GBytes *value_gbytes = g_variant_get_data_as_bytes(value_variant);
     std::vector<unsigned char> result;
 
@@ -304,10 +309,11 @@ bool BluetoothGattCharacteristic::get_notifying ()
 
 std::vector<std::string> BluetoothGattCharacteristic::get_flags ()
 {
-    const char * const *flags_c = gatt_characteristic1_get_flags (object);
+    gchar**flags_c = gatt_characteristic1_dup_flags (object);
     std::vector<std::string> flags;
     for (int i = 0; flags_c[i] != NULL ;i++)
         flags.push_back(std::string(flags_c[i]));
+    g_strfreev(flags_c);
     return flags;
 
 }
