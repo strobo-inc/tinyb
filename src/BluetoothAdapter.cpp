@@ -266,6 +266,19 @@ bool BluetoothAdapter::remove_device (
     return result;
 }
 
+int BluetoothAdapter::remove_devices(){
+    std::vector<std::unique_ptr<tinyb::BluetoothDevice>> array = get_devices();
+
+    for (unsigned int i =0;i<array.size();i++) {
+        std::unique_ptr<tinyb::BluetoothDevice> *obj_device = &array.at(i);
+        std::string path = obj_device->get()->get_object_path();
+        remove_device(path.c_str());
+
+    }
+    return array.size();
+
+}
+
 /* D-Bus property accessors: */
 std::string BluetoothAdapter::get_address ()
 {

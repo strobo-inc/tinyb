@@ -79,9 +79,6 @@ void BluetoothNotificationHandler::on_properties_changed_device(GDBusProxy *prox
                 bool new_value;
                 g_variant_get(value, "b", &new_value);
                 connected_callback(new_value);
-                if(!new_value){//disconnected
-                    c->remove_device();
-                }
                 continue;
             }
             auto mfg_callback = c->mfg_callback;

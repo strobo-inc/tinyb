@@ -104,6 +104,11 @@ public:
     bool remove_device (
         const std::string &arg_device
     );
+
+    /*** Removes all devices from the list of devices available on this adapter
+     *  @return Number of removed devices
+     */
+    int remove_devices();
     
     /** Turns on device discovery if it is disabled.
       * @return TRUE if discovery was successfully enabled

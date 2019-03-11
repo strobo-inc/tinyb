@@ -92,6 +92,8 @@ public:
         }
     }
 
+    int remove_devices();
+
 
     /** Find a BluetoothObject of type T. If parameters name, identifier and
       * parent are not null, the returned object will have to match them.
@@ -238,4 +240,6 @@ public:
       */
     bool stop_discovery(
     );
+
+    bool get_discovering();
 };
