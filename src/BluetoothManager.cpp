@@ -334,17 +334,6 @@ std::vector<std::unique_ptr<BluetoothAdapter>> BluetoothManager::get_adapters()
 std::vector<std::unique_ptr<BluetoothDevice>> BluetoothManager::get_devices()
 {
     std::vector<std::unique_ptr<BluetoothDevice>> vector;
-    //ここにdbusを更新する処理を入れる
-    bool discovery_state=get_discovering();
-    if(discovery_state){
-        stop_discovery();//一旦discoveryを止める
-    }
-    remove_devices();
-
-    if(discovery_state){
-        start_discovery();
-    }
-
     GList *l, *objects = g_dbus_object_manager_get_objects(gdbus_manager);
 
     for (l = objects; l != NULL; l = l->next) {
