@@ -334,6 +334,7 @@ std::vector<std::unique_ptr<BluetoothAdapter>> BluetoothManager::get_adapters()
 std::vector<std::unique_ptr<BluetoothDevice>> BluetoothManager::get_devices()
 {
     std::vector<std::unique_ptr<BluetoothDevice>> vector;
+    //ここにdbusを更新する処理を入れるか，
     GList *l, *objects = g_dbus_object_manager_get_objects(gdbus_manager);
 
     for (l = objects; l != NULL; l = l->next) {
@@ -342,6 +343,7 @@ std::vector<std::unique_ptr<BluetoothDevice>> BluetoothManager::get_devices()
         auto p = BluetoothDevice::make(object);
         if (p != nullptr)
             vector.push_back(std::move(p));
+        //ここら辺に接続チェックを入れる?
     }
     g_list_free_full(objects, g_object_unref);
 
