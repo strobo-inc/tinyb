@@ -33,12 +33,6 @@ typedef struct _Object Object;
 struct _Adapter1;
 typedef struct _Adapter1 Adapter1;
 
-enum class TransportType{
-    AUTO=0,
-    BREDR=1,
-    LE=2,
-    NONE=3
-};
 
 /**
   * Provides access to Bluetooth adapters. Follows the BlueZ adapter API

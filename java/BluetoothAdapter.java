@@ -33,29 +33,7 @@ import java.time.Duration;
   */
 public class BluetoothAdapter extends BluetoothObject
 {
-    /**
-     * Transport parameter determines the type of
-     scan.
 
-     Possible values:
-     "AUTO"  - interleaved scan
-     "BREDR" - BR/EDR inquiry
-     "LE"    - LE scan only
-     */
-    public enum TransportType{
-        AUTO(0),
-        BREDR(1),
-        LE(2),
-        NONE(3),;
-
-        private final int value;
-        private TransportType(int value){
-            this.value=value;
-        }
-        public int getValue(){
-            return this.value;
-        }
-    }
     public native BluetoothType getBluetoothType();
     public native BluetoothAdapter clone();
 

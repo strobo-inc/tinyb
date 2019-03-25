@@ -3,17 +3,33 @@ package tinyb;
 /**
  * TransportType determines type of bluetooth scan.
  */
-public enum TransportType {
+
+/*
+     Possible values:
+     "AUTO"  - interleaved scan
+     "BREDR" - BR/EDR inquiry
+     "LE"    - LE scan only
+     */
+public enum TransportType{
     /**
      * interleaved scan
-     */
-    AUTO,
-    /**
+    */
+    AUTO(0),
+     /**
      * BR/EDR inquiry
      */
-    BREDR,
-    /**
+    BREDR(1),
+     /**
      * LE scan only
      */
-    LE
+    LE(2),
+    NONE(3),;
+
+    private final int value;
+    private TransportType(int value){
+        this.value=value;
+    }
+    public int getValue(){
+        return this.value;
+    }
 }

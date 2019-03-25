@@ -304,21 +304,22 @@ public class BluetoothManager
             String nativeAPIVersion = getNativeAPIVersion();
             String APIVersion = BluetoothManager.class.getPackage().getSpecificationVersion();
             if (APIVersion.equals(nativeAPIVersion) == false) {
+                String versionInfo="\nNative="+nativeAPIVersion+",Java="+APIVersion;
                 String[] nativeAPIVersionCode = nativeAPIVersion.split("\\D");
                 String[] APIVersionCode = APIVersion.split("\\D");
                 if (APIVersionCode[0].equals(nativeAPIVersionCode[0]) == false) {
                     if (Integer.valueOf(APIVersionCode[0]) < Integer.valueOf(nativeAPIVersionCode[0]))
-                        throw new RuntimeException("Java library is out of date. Please update the Java library.");
-                    else throw new RuntimeException("Native library is out of date. Please update the native library.");
+                        throw new RuntimeException("Java library is out of date. Please update the Java library."+versionInfo);
+                    else throw new RuntimeException("Native library is out of date. Please update the native library."+versionInfo);
                 }
                 else if (APIVersionCode[0].equals("0") == true) {
                     if (Integer.valueOf(APIVersionCode[1]) < Integer.valueOf(nativeAPIVersionCode[1]))
-                        throw new RuntimeException("Java library is out of date. Please update the Java library.");
-                    else throw new RuntimeException("Native library is out of date. Please update the native library.");
+                        throw new RuntimeException("Java library is out of date. Please update the Java library."+versionInfo);
+                    else throw new RuntimeException("Native library is out of date. Please update the native library."+versionInfo);
                 }
                 else if (Integer.valueOf(APIVersionCode[1]) < Integer.valueOf(nativeAPIVersionCode[1]))
-                    System.err.println("Java library is out of date. Please update the Java library.");
-                else System.err.println("Native library is out of date. Please update the native library.");
+                    System.err.println("Java library is out of date. Please update the Java library."+versionInfo);
+                else System.err.println("Native library is out of date. Please update the native library."+versionInfo);
             }
             inst = new BluetoothManager();
             inst.init();

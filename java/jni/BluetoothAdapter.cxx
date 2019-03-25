@@ -131,7 +131,7 @@ jboolean Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj
                 env->ReleaseStringUTFChars(jstr,buff);
             }
         }
-        jclass transport_type_class = search_class(env,"tinyb/BluetoothAdapter$TransportType");
+        jclass transport_type_class = search_class(env,"tinyb/TransportType");
         jmethodID get_value_id = search_method(env,transport_type_class,"getValue","()I",false);
         jint transport_type_val = env->CallIntMethod(transport_type,get_value_id);
         if(pathloss<0){

@@ -39,9 +39,10 @@ enum class BluetoothType {
     GATT_DESCRIPTOR
 };
     enum class TransportType {
-        AUTO,
-        BREDR,
-        LE
+        AUTO=0,
+        BREDR=1,
+        LE=2,
+        NONE=3
     };
 
     class BluetoothEvent;
