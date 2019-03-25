@@ -824,3 +824,39 @@ void Java_tinyb_BluetoothAdapter_delete(JNIEnv *env, jobject obj)
     }
 }
 
+void Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj, jobject uuids, jint rssi, jint pathloss, jint transportType)
+{
+    try {
+        BluetoothAdapter *obj_adapter = getInstance<BluetoothAdapter>(env, obj);
+
+        jclass cList = env->FindClass("java/util/List");
+
+        jmethodID mSize = env->GetMethodID(cList, "size", "()I");
+        jmethodID mGet = env->GetMethodID(cList, "get", "(I)Ljava/lang/Object;");
+
+        jint size = env->CallIntMethod(uuids, mSize);
+        std::vector<BluetoothUUID> native_uuids;
+
+        for (jint i = 0; i < size; i++) {
+            jstring strObj = (jstring) env->CallObjectMethod(uuids, mGet, i);
+            const char * chr = env->GetStringUTFChars(strObj, NULL);
+            BluetoothUUID uuid(chr);
+            native_uuids.push_back(uuid);
+            env->ReleaseStringUTFChars(strObj, chr);
+        }
+
+        TransportType t_type = from_int_to_transport_type((int) transportType);
+
+        obj_adapter->set_discovery_filter(native_uuids, (int16_t) rssi, (uint16_t) pathloss, t_type);
+    } catch (std::bad_alloc &e)     {
+        raise_java_oom_exception(env, e);
+    } catch (BluetoothException &e) {
+        raise_java_bluetooth_exception(env, e);
+    } catch (std::runtime_error &e) {
+        raise_java_runtime_exception(env, e);
+    } catch (std::invalid_argument &e) {
+        raise_java_invalid_arg_exception(env, e);
+    } catch (std::exception &e) {
+        raise_java_exception(env, e);
+    }
+}
