@@ -114,6 +114,7 @@ jboolean Java_tinyb_BluetoothAdapter_stopDiscovery(JNIEnv *env, jobject obj)
 
 jboolean Java_tinyb_BluetoothAdapter_setDiscoveryFilter(JNIEnv *env, jobject obj, jobjectArray uuids, jshort rssi, jshort pathloss,jobject transport_type){
     bool retval=false;
+    return JNI_TRUE;
     try {
         BluetoothAdapter *obj_adapter = getInstance<BluetoothAdapter>(env,obj);
         jsize uuid_array_length=env->GetArrayLength(uuids);

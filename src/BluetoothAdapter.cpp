@@ -203,6 +203,7 @@ bool BluetoothAdapter::stop_discovery ()
 
 bool BluetoothAdapter::set_discovery_filter(std::vector <BluetoothUUID> uuids, int16_t rssi, uint16_t pathloss ,
                                             const TransportType &transport) {
+    printf("BluetoothAdapter::set_discovery_filter start\n");
     GError *error = NULL;
     bool result = true;
     GVariantDict dict;
@@ -239,6 +240,7 @@ bool BluetoothAdapter::set_discovery_filter(std::vector <BluetoothUUID> uuids, i
 
     result = adapter1_call_set_discovery_filter_sync(object,variant,NULL,&error);
     handle_error(error);
+    printf("BluetoothAdapter::set_discovery_filter end\n");
     return result;
 }
 bool BluetoothAdapter::remove_discovery_filter(void){
