@@ -148,6 +148,7 @@ void Java_tinyb_BluetoothGattCharacteristic_enableValueNotifications(JNIEnv *env
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
+                jni_env->DeleteLocalRef(notification);
 
             });
     } catch (std::bad_alloc &e) {
