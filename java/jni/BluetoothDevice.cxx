@@ -421,6 +421,10 @@ void Java_tinyb_BluetoothDevice_enablePairedNotifications(JNIEnv *env, jobject o
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
 
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred in paired notification handler\n");
+                }
+
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
                 jni_env->DeleteLocalRef(notification);
@@ -513,6 +517,10 @@ void Java_tinyb_BluetoothDevice_enableTrustedNotifications(JNIEnv *env, jobject 
                 jmethodID constructor = search_method(*jni_env, boolean_cls, "<init>", "(Z)V", false);
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
+
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred in trusted notification handler\n");
+                }
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
@@ -607,6 +615,10 @@ void Java_tinyb_BluetoothDevice_enableBlockedNotifications(JNIEnv *env, jobject 
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
 
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred in blocked notification handler\n");
+                }
+
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
                 jni_env->DeleteLocalRef(notification);
@@ -700,6 +712,10 @@ void Java_tinyb_BluetoothDevice_enableRSSINotifications(JNIEnv *env, jobject obj
 
                 jobject result = jni_env->NewObject(short_cls, constructor, (jshort) v);
 
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred in rssi notification handler\n");
+                }
+
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
                 jni_env->DeleteLocalRef(notification);
@@ -772,6 +788,10 @@ void Java_tinyb_BluetoothDevice_enableConnectedNotifications(JNIEnv *env, jobjec
                 jmethodID constructor = search_method(*jni_env, boolean_cls, "<init>", "(Z)V", false);
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
+
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred in connected notification handler\n");
+                }
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
@@ -919,6 +939,11 @@ jobject Java_tinyb_BluetoothDevice_getManufacturerData(JNIEnv *env, jobject obj)
             jbyteArray arr = env->NewByteArray(it.second.size());
             env->SetByteArrayRegion(arr, 0, it.second.size(), (const jbyte *)it.second.data());
             jobject key = env->NewObject(short_cls, short_ctor, it.first);
+
+            if(env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                throw std::runtime_error("Exception occurred before CallObjectMethod\n");
+            }
+
             env->CallObjectMethod(result, map_put, key, arr);
 
             env->DeleteLocalRef(arr);
@@ -973,10 +998,18 @@ void Java_tinyb_BluetoothDevice_enableManufacturerDataNotifications(JNIEnv *env,
                     jbyteArray arr = jni_env->NewByteArray(it.second.size());
                     jni_env->SetByteArrayRegion(arr, 0, it.second.size(), (const jbyte *)it.second.data());
                     jobject key = jni_env->NewObject(short_cls, short_ctor, it.first);
+
+                    if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                        throw std::runtime_error("Exception occurred before CallObjectMethod\n");
+                    }
                     jni_env->CallObjectMethod(result, map_put, key, arr);
 
                     jni_env->DeleteLocalRef(arr);
                     jni_env->DeleteLocalRef(key);
+                }
+
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred before CallVoidMethod\n");
                 }
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
@@ -1037,6 +1070,10 @@ jobject Java_tinyb_BluetoothDevice_getServiceData(JNIEnv *env, jobject obj)
             jbyteArray arr = env->NewByteArray(it.second.size());
             env->SetByteArrayRegion(arr, 0, it.second.size(), (const jbyte *)it.second.data());
             jobject key = env->NewStringUTF(it.first.c_str());
+
+            if(env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                throw std::runtime_error("Exception occurred before CallObjectMethod\n");
+            }
             env->CallObjectMethod(result, map_put, key, arr);
 
             env->DeleteLocalRef(arr);
@@ -1087,10 +1124,19 @@ void Java_tinyb_BluetoothDevice_enableServiceDataNotifications(JNIEnv *env, jobj
                     jbyteArray arr = jni_env->NewByteArray(it.second.size());
                     jni_env->SetByteArrayRegion(arr, 0, it.second.size(), (const jbyte *)it.second.data());
                     jobject key = jni_env->NewStringUTF(it.first.c_str());
+
+                    if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                        throw std::runtime_error("Exception occurred before CallObjectMethod\n");
+                    }
+
                     jni_env->CallObjectMethod(result, map_put, key, arr);
 
                     jni_env->DeleteLocalRef(arr);
                     jni_env->DeleteLocalRef(key);
+                }
+
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred before CallObjectMethod\n");
                 }
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
@@ -1187,6 +1233,10 @@ void Java_tinyb_BluetoothDevice_enableServicesResolvedNotifications(JNIEnv *env,
                 jmethodID constructor = search_method(*jni_env, boolean_cls, "<init>", "(Z)V", false);
 
                 jobject result = jni_env->NewObject(boolean_cls, constructor, v ? JNI_TRUE : JNI_FALSE);
+
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred before CallVoidMethod\n");
+                }
 
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);

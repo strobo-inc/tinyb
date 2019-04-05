@@ -146,6 +146,10 @@ void Java_tinyb_BluetoothGattCharacteristic_enableValueNotifications(JNIEnv *env
                 jbyteArray result = jni_env->NewByteArray((jsize)size);
                 jni_env->SetByteArrayRegion(result, 0, (jsize)size, (const jbyte *)&v[0]);
 
+                if(jni_env->ExceptionCheck()==JNI_TRUE){//unhandled exception
+                    throw std::runtime_error("Exception occurred in value notification\r");
+                }
+
                 jni_env->CallVoidMethod(**callback_ptr, method, result);
                 jni_env->DeleteLocalRef(result);
                 jni_env->DeleteLocalRef(notification);

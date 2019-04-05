@@ -106,6 +106,9 @@ jobject convert_vector_to_jobject(JNIEnv *env, std::vector<std::unique_ptr<T>>& 
         {
             throw std::runtime_error("cannot create instance of class\n");
         }
+        if(env->ExceptionCheck()==JNI_TRUE){//there is unhandled exception
+            throw std::runtime_error("exception occurred before CallBooleanMethod\n");
+        }
         env->CallBooleanMethod(result, arraylist_add, object);
     }
     return result;
