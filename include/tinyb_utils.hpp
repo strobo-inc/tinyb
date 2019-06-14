@@ -37,6 +37,4 @@ namespace tinyb {
     GBytes *from_vector_to_gbytes(const std::vector<unsigned char>& array);
     std::vector<unsigned char> from_iter_to_vector(GVariant *iter);
     void handle_error(GError *error);
-    std::vector<std::string>get_backtrace();
-    void trap_handle(void);
 };

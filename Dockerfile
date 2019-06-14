@@ -12,7 +12,6 @@ RUN echo deb http://archive.debian.org/debian jessie-backports main >>/etc/apt/s
   gcc \
   g++ \
   wget \
-  libunwind8-dev \
 && rm -rf /var/lib/apt/lists/*
 
 
