@@ -42,7 +42,7 @@ class tinyb::BluetoothEventManager {
 public:
     static void on_interface_added (GDBusObject *object,
         GDBusInterface *interface, gpointer user_data) {
-        GDBusInterfaceInfo *info = g_dbus_interface_get_info(interface);
+        GDBusInterfaceInfo *info = g_dbus_interface_get_info(interface);//接続直後にここでGLib-GIO-CRITICALエラーが出る．failしてもhub自体の動作には影響しない（failするとinfo=nullが返るが下でハンドリングしている．)
         BluetoothType type = BluetoothType::NONE;
         BluetoothManager *manager = BluetoothManager::get_bluetooth_manager();
 

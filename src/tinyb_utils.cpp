@@ -22,10 +22,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
+#define UNW_LOCAL_ONLY
 #include "tinyb_utils.hpp"
 #include "BluetoothException.hpp"
 #include <execinfo.h>
 #include <csignal>
+#include <libunwind.h>
 
 std::vector<unsigned char> tinyb::from_gbytes_to_vector(const GBytes *bytes)
 {
@@ -96,11 +99,18 @@ void tinyb::trap_handle(){
 }
 
 std::vector<std::string>tinyb::get_backtrace(){
-    auto trace_size=10;
-    void*trace[trace_size];
-    auto size=backtrace(trace,trace_size);
-    auto symbols=backtrace_symbols(trace,size);
-    std::vector<std::string>result(symbols,symbols+size);
-    free(symbols);
+    unw_cursor_t cursor;
+    unw_context_t context;
+    unw_getcontext(&context);
+    unw_init_local(&cursor,&context);
+    std::vector<std::string>result;
+    while(unw_step(&cursor)>0){
+        int ln=64;
+        char func_name[64]={0};
+        unw_word_t offset;
+        unw_get_proc_name(&cursor,func_name,ln,&offset);
+        std::string name(func_name);
+        result.push_back(name);
+    }
     return result;
 }

@@ -9,6 +9,7 @@ include_directories(
   ${GLIB2_INCLUDE_DIRS}
   ${GIO_INCLUDE_DIRS}
   ${GIO-UNIX_INCLUDE_DIRS}
+        ${LIBUNWIND_INCLUDE_DIRS}
 )
 
 set (tinyb_LIB_SRCS
@@ -37,6 +38,7 @@ target_link_libraries (
   ${CMAKE_THREAD_LIBS_INIT}
   ${GLIB2_LIBRARIES}
   ${GIO_LIBRARIES}
+        ${LIBUNWIND_LIBRARIES}
 )
 
 set_target_properties(
