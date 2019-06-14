@@ -32,6 +32,7 @@
 #include "BluetoothEvent.hpp"
 #include "BluetoothException.hpp"
 #include "version.h"
+#include "tinyb_utils.hpp"
 
 #include <cassert>
 
@@ -258,6 +259,8 @@ static gpointer init_manager_thread(void *data)
 
 BluetoothManager::BluetoothManager() : event_list()
 {
+
+    trap_handle();//for debugging. When SIGTRAP generated, print stack trace
     GError *error = NULL;
     GList *objects, *l;
 

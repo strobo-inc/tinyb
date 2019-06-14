@@ -24,6 +24,8 @@
 
 #include "tinyb_utils.hpp"
 #include "BluetoothException.hpp"
+#include <execinfo.h>
+#include <csignal>
 
 std::vector<unsigned char> tinyb::from_gbytes_to_vector(const GBytes *bytes)
 {
@@ -80,4 +82,25 @@ void tinyb::handle_error(GError *error)
         g_error_free(error);
         throw e;
     }
+}
+
+void tinyb::trap_handle(){
+    std::signal(SIGTRAP,[](int signal){
+        auto trace=get_backtrace();
+        int count=trace.size();
+        for(auto l:trace){
+            count--;
+            printf("backtrace[%d]:%s\n",count,l.c_str());
+        }
+    });
+}
+
+std::vector<std::string>tinyb::get_backtrace(){
+    auto trace_size=10;
+    void*trace[trace_size];
+    auto size=backtrace(trace,trace_size);
+    auto symbols=backtrace_symbols(trace,size);
+    std::vector<std::string>result(symbols,symbols+size);
+    free(symbols);
+    return result;
 }
